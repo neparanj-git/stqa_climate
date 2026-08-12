@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Severity } from './types';
 export const severityColors:Record<Severity,string>={Normal:'#22a884','Heat Alert':'#f0b429',Heatwave:'#ed762f','Severe Heatwave':'#c93c32'};
-export function PageHead({eyebrow,title,copy,action}:{eyebrow:string;title:string;copy:string;action?:ReactNode}){return <div className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="eyebrow">{eyebrow}</p><h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">{copy}</p></div>{action}</div>}
+export function PageHead({eyebrow,title,copy,action}:{eyebrow:string;title:string;copy:string;action?:ReactNode}){return <div className="mb-8 flex flex-col justify-between gap-5 border-b border-slate-200/70 pb-7 md:flex-row md:items-end"><div><p className="eyebrow">{eyebrow}</p><h1 className="mt-2 text-3xl font-bold tracking-[-.035em] text-ink md:text-[2.65rem] md:leading-tight">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 md:text-[15px]">{copy}</p></div>{action}</div>}
 export function Badge({severity}:{severity:Severity}){return <span className="inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-bold" style={{color:severityColors[severity],background:`${severityColors[severity]}15`}}><i className="h-1.5 w-1.5 rounded-full" style={{background:severityColors[severity]}}/>{severity}</span>}
-export function Loading(){return <div className="panel animate-pulse text-sm text-slate-400">Loading climate data…</div>}
+export function Loading(){return <div className="panel flex items-center gap-3 text-sm text-slate-400"><span className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-ocean"/>Loading climate data…</div>}
 export function ErrorBox({message}:{message:string}){return <div className="panel border-red-200 bg-red-50 text-sm text-red-700">{message}</div>}
-

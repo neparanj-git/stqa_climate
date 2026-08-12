@@ -42,5 +42,10 @@ npm test        # backend classification tests
 
 ## Deployment
 
-Deploy `frontend/` to Vercel and set `VITE_API_URL` to the public backend URL. Deploy `backend/` to a Node host such as Render or Railway, then configure `GEMINI_API_KEY`, `PORT`, and an appropriate CORS policy for the production frontend. The current permissive CORS configuration is intended for this demo.
+The project deploys as one Vercel application: the Vite frontend is served from `frontend/dist`, and the Express API runs as a serverless function under `/api`. This keeps browser/API traffic same-origin in production.
 
+1. Import the repository into Vercel with the repository root as the project directory.
+2. Optionally add `GEMINI_API_KEY` to enable AI-written advisories. Without it, the API returns reviewed, audience-specific fallback guidance.
+3. Deploy. The included `vercel.json` supplies the build, routing, function, and security-header configuration.
+
+For a CLI deployment, authenticate with `vercel login`, then run `vercel --prod` from the repository root.
