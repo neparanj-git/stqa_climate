@@ -1,5 +1,5 @@
-import { REGIONS, type Observation, type Region, type Season, type StationReading } from './domain.js';
-import { classifySeverity } from './severity.js';
+import { REGIONS, type Observation, type Region, type Season, type StationReading } from './domain.ts';
+import { classifySeverity } from './severity.ts';
 
 export const regionMeta: Record<Region, { normal: number; lat: number; lon: number }> = {
   'North India': { normal: 37, lat: 30.7, lon: 78.2 }, 'Northwest India': { normal: 39, lat: 27.2, lon: 73.8 },
@@ -42,4 +42,3 @@ export const stations: StationReading[] = stationSeeds.map(([station, location, 
   const regionalForecast = latestByRegion(region).maxTemperature; const latestReading = Number((regionalForecast + delta).toFixed(1)); const gap = Math.abs(delta);
   return { station, location, region, latitude, longitude, latestReading, regionalForecast, validation: gap <= 1.5 ? 'consistent' : gap <= 2.5 ? 'watch' : 'divergent', timestamp: new Date().toISOString() };
 });
-

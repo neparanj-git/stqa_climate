@@ -1,5 +1,5 @@
-import { observations, stations } from './data.js';
-import type { Region, Season } from './domain.js';
+import { observations, stations } from './data.ts';
+import type { Region, Season } from './domain.ts';
 
 export interface ObservationFilter { region?: Region; season?: Season; from?: string; to?: string }
 export class ClimateRepository {
@@ -7,4 +7,3 @@ export class ClimateRepository {
   getStations() { return stations; }
 }
 export const climateRepository = new ClimateRepository();
-

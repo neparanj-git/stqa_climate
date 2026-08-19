@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { REGIONS, type Region } from './domain.js';
-import { climateRepository } from './repository.js';
-import { latestByRegion, regionMeta } from './data.js';
-import { classifySeverity } from './severity.js';
+import { REGIONS, type Region } from './domain.ts';
+import { climateRepository } from './repository.ts';
+import { latestByRegion, regionMeta } from './data.ts';
+import { classifySeverity } from './severity.ts';
 
 export const app = express();
 app.disable('x-powered-by');

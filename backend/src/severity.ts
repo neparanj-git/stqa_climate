@@ -1,4 +1,4 @@
-import type { HeatwaveSeverity } from './domain.js';
+import type { HeatwaveSeverity } from './domain.ts';
 
 /** Demo classification based on departure from a region's seasonal normal. */
 export function classifySeverity(temperature: number, seasonalNormal: number): HeatwaveSeverity {
@@ -10,4 +10,3 @@ export function classifySeverity(temperature: number, seasonalNormal: number): H
 }
 
 export const severityRank: Record<HeatwaveSeverity, number> = { Normal: 0, 'Heat Alert': 1, Heatwave: 2, 'Severe Heatwave': 3 };
-

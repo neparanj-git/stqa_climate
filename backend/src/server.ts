@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import { app } from './app.js';
+import { app } from './app.ts';
 const port = Number(process.env.PORT ?? 4000);
 app.listen(port, () => console.log(`Heatwave API listening on http://localhost:${port}`));
-
