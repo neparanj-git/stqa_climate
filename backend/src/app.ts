@@ -6,6 +6,7 @@ import { climateRepository } from './repository.ts';
 import { forecastProvider } from './forecast.ts';
 import { acknowledgeAlert, createAlert, listAlerts, operationalSnapshot } from './operations.ts';
 import { climateEvents, type ClimateEvent } from './events.ts';
+import { liveStations } from './weather.ts';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -14,7 +15,8 @@ app.use(express.json({ limit: '32kb' }));
 app.use((_req, res, next) => { res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin'); res.setHeader('Cache-Control', 'no-store'); next(); });
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'heatwave-api', version: '2.0.0', forecastProvider: forecastProvider.name, timestamp: new Date().toISOString() }));
-app.get('/api/operations/snapshot', (_req, res) => res.json(operationalSnapshot()));
+app.get('/api/catalog', (_req,res)=>res.json({regions:REGIONS,severities:['Normal','Heat Alert','Heatwave','Severe Heatwave'],stakeholders:['citizens','farmers','health agencies','local authorities']}));
+app.get('/api/operations/snapshot', async (_req,res,next) => { try { res.json(await operationalSnapshot()); } catch(error){ next(error); } });
 app.get('/api/observations', (req, res) => {
   const { region, season, from, to } = req.query;
   if (region && (!isString(region) || !REGIONS.includes(region as Region))) return res.status(400).json({ error: 'Invalid region' });
@@ -22,13 +24,13 @@ app.get('/api/observations', (req, res) => {
   if ((from && !validDate(from)) || (to && !validDate(to))) return res.status(400).json({ error: 'Dates must use YYYY-MM-DD format' });
   res.json(climateRepository.findObservations({ region: region as never, season: season as never, from: from as string, to: to as string }));
 });
-app.get('/api/regions/summary', (_req, res) => res.json(operationalSnapshot().regions));
+app.get('/api/regions/summary', async (_req,res,next) => { try { res.json((await operationalSnapshot()).regions); } catch(error){ next(error); } });
 app.get('/api/forecast/:region', async (req, res, next) => {
   try { const region = decodeURIComponent(req.params.region) as Region; if (!REGIONS.includes(region)) return res.status(404).json({ error: 'Unknown region' }); const days = Math.min(10, Math.max(1, Number(req.query.days) || 7)); res.json(await forecastProvider.forecast(region, days)); } catch (error) { next(error); }
 });
-app.get('/api/stations', (_req, res) => res.json(climateRepository.getStations()));
-app.get('/api/alerts', (req, res) => { const status = req.query.status; if (status && status !== 'active' && status !== 'acknowledged') return res.status(400).json({ error: 'Invalid alert status' }); res.json(listAlerts(status as never)); });
-app.patch('/api/alerts/:id/acknowledge', (req, res) => { const alert = acknowledgeAlert(req.params.id); if (!alert) return res.status(404).json({ error: 'Alert not found' }); climateEvents.publish('alert-updated', alert); res.json(alert); });
+app.get('/api/stations', async (_req,res,next) => { try { res.json(await liveStations()); } catch(error){ next(error); } });
+app.get('/api/alerts', async (req,res,next) => { try { const status=req.query.status;if(status&&status!=='active'&&status!=='acknowledged')return res.status(400).json({error:'Invalid alert status'});res.json(await listAlerts(status as never)); } catch(error){ next(error); } });
+app.patch('/api/alerts/:id/acknowledge', async (req,res,next) => { try { const alert=await acknowledgeAlert(req.params.id);if(!alert)return res.status(404).json({error:'Alert not found'});climateEvents.publish('alert-updated',alert);res.json(alert); } catch(error){ next(error); } });
 
 app.post('/api/ingest/observations', (req, res) => {
   if (process.env.INGEST_API_KEY && req.header('x-ingest-key') !== process.env.INGEST_API_KEY) return res.status(401).json({ error: 'Invalid ingestion credentials' });

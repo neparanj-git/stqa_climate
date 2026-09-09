@@ -8,7 +8,9 @@ A full-stack, real-time decision-support platform for monitoring regional heat, 
 - `backend/` — Express and TypeScript API, validated AWS ingestion, SSE live stream, alert lifecycle, pluggable forecasting provider, repository/service separation, Gemini integration
 - `shared/` — reusable domain types for future frontend/backend convergence
 
-The checked-in dataset remains deterministic development data and must not be treated as official meteorological guidance. The operational API is ready to accept authenticated AWS observations, and its forecasting contract can be replaced by a Python TCN, LSTM, TFT, or external inference service without changing route handlers.
+Runtime temperatures, humidity, wind and daily forecasts come from the configured weather-provider adapter. The default development provider is Open-Meteo; it can be replaced with IMD/AWS infrastructure without changing route handlers or frontend components. The forecasting contract is also ready for a Python TCN, LSTM, TFT, or external inference service.
+
+Region coordinates, station locations and heat-classification thresholds are domain configuration. They are never used to fabricate measurements. When the weather provider is unavailable, the API returns an error instead of displaying generated fallback weather.
 
 ## Local setup
 
@@ -36,6 +38,7 @@ npm test        # backend classification tests
 
 - `GET /api/observations?region=&season=&from=&to=`
 - `GET /api/regions/summary`
+- `GET /api/catalog`
 - `GET /api/operations/snapshot`
 - `GET /api/forecast/:region?days=7`
 - `GET /api/stations`
@@ -63,7 +66,14 @@ Set `INGEST_API_KEY` in production. Send each quality-checked AWS reading as JSO
 }
 ```
 
-Accepted readings update the station repository, append an observation, emit a live event, and create an operational alert when the classified severity reaches heatwave level.
+Accepted readings update the ingestion repository, append an observation, emit a live event, and create an operational alert when the classified severity reaches heatwave level.
+
+### Runtime configuration
+
+- `WEATHER_API_URL` selects the live weather provider endpoint.
+- `WEATHER_CACHE_SECONDS` controls provider response caching.
+- `INGEST_API_KEY` protects AWS ingestion in production.
+- `GEMINI_API_KEY` optionally enables generated advisories.
 
 ## Deployment
 
