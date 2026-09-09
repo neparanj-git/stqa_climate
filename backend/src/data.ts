@@ -12,11 +12,11 @@ export const regionMeta: Record<Region, { normal: number; lat: number; lon: numb
 };
 
 export const stationRegistry: Array<{ station:string; location:string; region:Region; latitude:number; longitude:number }> = [
-  {station:'AWS-DEL-01',location:'New Delhi',region:'North India',latitude:28.61,longitude:77.21},{station:'AWS-SGR-02',location:'Srinagar',region:'North India',latitude:34.08,longitude:74.80},
-  {station:'AWS-JAI-03',location:'Jaipur',region:'Northwest India',latitude:26.91,longitude:75.79},{station:'AWS-JSL-04',location:'Jaisalmer',region:'Northwest India',latitude:26.92,longitude:70.91},
-  {station:'AWS-BPL-05',location:'Bhopal',region:'Central India',latitude:23.26,longitude:77.41},{station:'AWS-NGP-06',location:'Nagpur',region:'Central India',latitude:21.15,longitude:79.09},
-  {station:'AWS-PAT-07',location:'Patna',region:'East India',latitude:25.59,longitude:85.14},{station:'AWS-KOL-08',location:'Kolkata',region:'East India',latitude:22.57,longitude:88.36},
-  {station:'AWS-GHY-09',location:'Guwahati',region:'Northeast India',latitude:26.14,longitude:91.74},{station:'AWS-SHG-10',location:'Shillong',region:'Northeast India',latitude:25.58,longitude:91.89},
-  {station:'AWS-HYD-11',location:'Hyderabad',region:'South Peninsula',latitude:17.39,longitude:78.49},{station:'AWS-BLR-12',location:'Bengaluru',region:'South Peninsula',latitude:12.97,longitude:77.59},
-  {station:'AWS-GOA-13',location:'Panaji',region:'West Coast',latitude:15.49,longitude:73.83},{station:'AWS-KOC-14',location:'Kochi',region:'West Coast',latitude:9.93,longitude:76.27}
+  {station:'WX-DEL-01',location:'New Delhi',region:'North India',latitude:28.61,longitude:77.21},{station:'WX-SGR-02',location:'Srinagar',region:'North India',latitude:34.08,longitude:74.80},
+  {station:'WX-JAI-03',location:'Jaipur',region:'Northwest India',latitude:26.91,longitude:75.79},{station:'WX-JSL-04',location:'Jaisalmer',region:'Northwest India',latitude:26.92,longitude:70.91},
+  {station:'WX-BPL-05',location:'Bhopal',region:'Central India',latitude:23.26,longitude:77.41},{station:'WX-NGP-06',location:'Nagpur',region:'Central India',latitude:21.15,longitude:79.09},
+  {station:'WX-PAT-07',location:'Patna',region:'East India',latitude:25.59,longitude:85.14},{station:'WX-KOL-08',location:'Kolkata',region:'East India',latitude:22.57,longitude:88.36},
+  {station:'WX-GHY-09',location:'Guwahati',region:'Northeast India',latitude:26.14,longitude:91.74},{station:'WX-SHG-10',location:'Shillong',region:'Northeast India',latitude:25.58,longitude:91.89},
+  {station:'WX-HYD-11',location:'Hyderabad',region:'South Peninsula',latitude:17.39,longitude:78.49},{station:'WX-BLR-12',location:'Bengaluru',region:'South Peninsula',latitude:12.97,longitude:77.59},
+  {station:'WX-GOA-13',location:'Panaji',region:'West Coast',latitude:15.49,longitude:73.83},{station:'WX-KOC-14',location:'Kochi',region:'West Coast',latitude:9.93,longitude:76.27}
 ];

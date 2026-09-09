@@ -68,6 +68,8 @@ Set `INGEST_API_KEY` in production. Send each quality-checked AWS reading as JSO
 
 Accepted readings update the ingestion repository, append an observation, emit a live event, and create an operational alert when the classified severity reaches heatwave level.
 
+The `WX-*` reference points shown before physical AWS integration are explicitly labelled with their provider in the interface. Only observations submitted through the ingestion endpoint are labelled `AWS ingestion`.
+
 ### Runtime configuration
 
 - `WEATHER_API_URL` selects the live weather provider endpoint.

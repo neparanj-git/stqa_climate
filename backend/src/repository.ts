@@ -11,7 +11,7 @@ export class ClimateRepository {
   ingest(reading: IngestReading) {
     const regionalForecast = this.findObservations({ region: reading.region }).at(-1)?.maxTemperature ?? reading.maxTemperature;
     const gap = Math.abs(reading.maxTemperature - regionalForecast);
-    const station: StationReading = { ...reading, latestReading: reading.maxTemperature, regionalForecast, validation: gap <= 1.5 ? 'consistent' : gap <= 2.5 ? 'watch' : 'divergent', quality: gap > 3.5 ? 'suspect' : 'good' };
+    const station: StationReading = { ...reading, latestReading: reading.maxTemperature, regionalForecast, validation: gap <= 1.5 ? 'consistent' : gap <= 2.5 ? 'watch' : 'divergent', quality: gap > 3.5 ? 'suspect' : 'good', provider: 'AWS ingestion' };
     const index = this.stations.findIndex(s => s.station === reading.station);
     if (index >= 0) this.stations[index] = station; else this.stations.push(station);
     const date = new Date(reading.timestamp); const month = date.getUTCMonth() + 1;
