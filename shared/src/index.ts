@@ -5,8 +5,7 @@ export type Region = typeof REGIONS[number];
 export type Season = typeof SEASONS[number];
 export type HeatwaveSeverity = typeof SEVERITIES[number];
 export type Stakeholder = 'citizens' | 'farmers' | 'health agencies' | 'local authorities';
-export interface Observation { timestamp: string; region: Region; season: Season; latitude: number; longitude: number; maxTemperature: number; station: string; severity: HeatwaveSeverity }
-export interface RegionSummary { region: Region; latestTemp: number; severity: HeatwaveSeverity; normal: number; latitude: number; longitude: number }
-export interface ForecastDay { date: string; maxTemperature: number; severity: HeatwaveSeverity }
-export interface StationReading { station: string; location: string; region: Region; latitude: number; longitude: number; latestReading: number; regionalForecast: number; validation: 'consistent' | 'watch' | 'divergent'; timestamp: string }
-
+export interface Observation { timestamp: string; region: Region; season: Season; latitude: number; longitude: number; maxTemperature: number; humidity?: number; windSpeed?: number; station: string; source?: 'IMD' | 'AWS' | 'seed'; severity: HeatwaveSeverity }
+export interface RegionSummary { region: Region; latestTemp: number; severity: HeatwaveSeverity; normal: number; latitude: number; longitude: number; departure: number }
+export interface ForecastDay { date: string; maxTemperature: number; lowerBound: number; upperBound: number; heatwaveProbability: number; severity: HeatwaveSeverity; model: string }
+export interface StationReading { station: string; location: string; region: Region; latitude: number; longitude: number; latestReading: number; humidity: number; windSpeed: number; regionalForecast: number; validation: 'consistent' | 'watch' | 'divergent'; quality: 'good' | 'delayed' | 'suspect'; timestamp: string }

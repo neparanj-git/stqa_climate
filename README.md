@@ -1,14 +1,14 @@
 # Heatwave Intelligence Platform
 
-A full-stack decision-support demo for monitoring regional heat, projecting near-term conditions, validating forecasts with simulated automated weather stations, and generating stakeholder-specific advisories.
+A full-stack, real-time decision-support platform for monitoring regional heat, ingesting automated weather-station readings, projecting near-term conditions, validating forecasts, managing alerts, and generating stakeholder-specific advisories.
 
 ## Architecture
 
 - `frontend/` — React, TypeScript, Vite, Tailwind CSS, Recharts
-- `backend/` — Express and TypeScript API, repository/service separation, Gemini integration
+- `backend/` — Express and TypeScript API, validated AWS ingestion, SSE live stream, alert lifecycle, pluggable forecasting provider, repository/service separation, Gemini integration
 - `shared/` — reusable domain types for future frontend/backend convergence
 
-The data is deterministic simulated climate data. Forecasts use a deliberately simple trend extrapolation and must not be treated as official meteorological guidance.
+The checked-in dataset remains deterministic development data and must not be treated as official meteorological guidance. The operational API is ready to accept authenticated AWS observations, and its forecasting contract can be replaced by a Python TCN, LSTM, TFT, or external inference service without changing route handlers.
 
 ## Local setup
 
@@ -36,9 +36,34 @@ npm test        # backend classification tests
 
 - `GET /api/observations?region=&season=&from=&to=`
 - `GET /api/regions/summary`
-- `GET /api/forecast/:region`
+- `GET /api/operations/snapshot`
+- `GET /api/forecast/:region?days=7`
 - `GET /api/stations`
+- `GET /api/alerts?status=active|acknowledged`
+- `PATCH /api/alerts/:id/acknowledge`
+- `POST /api/ingest/observations` with an optional `x-ingest-key`
+- `GET /api/stream` (server-sent events)
 - `POST /api/advisory` with `{ "region", "severity", "stakeholder" }`
+
+### Observation ingestion
+
+Set `INGEST_API_KEY` in production. Send each quality-checked AWS reading as JSON:
+
+```json
+{
+  "station": "AWS-MUM-15",
+  "location": "Mumbai",
+  "region": "West Coast",
+  "latitude": 19.076,
+  "longitude": 72.8777,
+  "maxTemperature": 36.8,
+  "humidity": 68,
+  "windSpeed": 4.2,
+  "timestamp": "2026-09-09T10:00:00.000Z"
+}
+```
+
+Accepted readings update the station repository, append an observation, emit a live event, and create an operational alert when the classified severity reaches heatwave level.
 
 ## Deployment
 

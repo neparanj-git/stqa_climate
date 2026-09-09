@@ -23,7 +23,7 @@ export const observations: Observation[] = Array.from({ length: 60 }, (_, offset
     const meta = regionMeta[region];
     const anomaly = seededWave(offset, i) + (i === 1 ? 4.4 : i === 2 ? 2.9 : i === 3 ? 1.8 : 0.5);
     const temp = Number((meta.normal + anomaly).toFixed(1));
-    return { timestamp: date.toISOString(), region, season: seasonFor(date.getUTCMonth() + 1), latitude: meta.lat, longitude: meta.lon, maxTemperature: temp, station: `REG-${String(i + 1).padStart(2, '0')}`, severity: classifySeverity(temp, meta.normal) };
+    return { timestamp: date.toISOString(), region, season: seasonFor(date.getUTCMonth() + 1), latitude: meta.lat, longitude: meta.lon, maxTemperature: temp, humidity: 30 + ((i * 7 + offset) % 38), windSpeed: Number((2.1 + (i % 4) * .8).toFixed(1)), station: `REG-${String(i + 1).padStart(2, '0')}`, source: 'seed' as const, severity: classifySeverity(temp, meta.normal) };
   });
 }).flat();
 
@@ -40,5 +40,5 @@ const stationSeeds: [string, string, Region, number, number, number][] = [
 export function latestByRegion(region: Region) { return observations.filter(o => o.region === region).at(-1)!; }
 export const stations: StationReading[] = stationSeeds.map(([station, location, region, latitude, longitude, delta]) => {
   const regionalForecast = latestByRegion(region).maxTemperature; const latestReading = Number((regionalForecast + delta).toFixed(1)); const gap = Math.abs(delta);
-  return { station, location, region, latitude, longitude, latestReading, regionalForecast, validation: gap <= 1.5 ? 'consistent' : gap <= 2.5 ? 'watch' : 'divergent', timestamp: new Date().toISOString() };
+  return { station, location, region, latitude, longitude, latestReading, humidity: 28 + (station.charCodeAt(4) % 38), windSpeed: Number((2.2 + (station.charCodeAt(5) % 5) * .7).toFixed(1)), regionalForecast, validation: gap <= 1.5 ? 'consistent' : gap <= 2.5 ? 'watch' : 'divergent', quality: gap > 2.5 ? 'suspect' : 'good', timestamp: new Date().toISOString() };
 });
